@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRET (1991) - Retro Clone</title>
+    <link rel="stylesheet" href="index.css">
+    <!-- Retro Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="arcade-cabinet">
+        <div class="screen-frame">
+            <!-- CRT Overlay effects -->
+            <div class="crt-effects crt-active" id="crt-overlay">
+                <div class="scanlines"></div>
+                <div class="vignette"></div>
+                <div class="screen-glass">
+                    
+                    <!-- Main Game Wrapper -->
+                    <div class="game-container">
+                        
+                        <!-- Left Panel Column -->
+                        <div class="side-column">
+                            <!-- Top Left: Points -->
+                            <div class="hud-panel panel-green" id="panel-points">
+                                <div class="screw top-left"></div>
+                                <div class="screw top-right"></div>
+                                <div class="screw bottom-left"></div>
+                                <div class="screw bottom-right"></div>
+                                <h2 data-lang-pl="Punkty" data-lang-en="Points">Punkty</h2>
+                                <div class="hud-value" id="points-val">0</div>
+                            </div>
+                            
+                            <!-- Bottom Left: Controls Display -->
+                            <div class="hud-panel panel-teal" id="panel-controls-info">
+                                <div class="screw top-left"></div>
+                                <div class="screw top-right"></div>
+                                <div class="screw bottom-left"></div>
+                                <div class="screw bottom-right"></div>
+                                <div class="controls-list">
+                                    <div class="control-row">
+                                        <span class="control-label" data-lang-pl="Lewo" data-lang-en="Left">Lewo</span>
+                                        <span class="control-arrow">←</span>
+                                    </div>
+                                    <div class="control-row">
+                                        <span class="control-label" data-lang-pl="Prawo" data-lang-en="Right">Prawo</span>
+                                        <span class="control-arrow">→</span>
+                                    </div>
+                                    <div class="control-row">
+                                        <span class="control-label" data-lang-pl="Góra" data-lang-en="Up">Góra</span>
+                                        <span class="control-arrow">↑</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Center Column: Playing Field -->
+                        <div class="center-column">
+                            <div class="play-field-border">
+                                <canvas id="game-canvas" width="500" height="500"></canvas>
+                                <!-- Start / Game Over Screens (Overlay on Canvas) -->
+                                <div class="screen-overlay" id="overlay-screen">
+                                    <div class="overlay-box retro-card">
+                                        <h1 class="main-title" id="overlay-title">K R E T</h1>
+                                        <p class="subtitle" id="overlay-subtitle" data-lang-pl="Naciśnij START aby zagrać" data-lang-en="Press START to play">Naciśnij START aby zagrać</p>
+                                        <div class="highscore-record" id="overlay-highscore-banner" style="display: none;">
+                                            <span data-lang-pl="Rekord:" data-lang-en="Highscore:">Rekord:</span> <span id="overlay-highscore-val">0</span>
+                                        </div>
+                                        <button id="btn-start" class="retro-btn large" data-lang-pl="START" data-lang-en="START">START</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title-banner">
+                                <span class="title-text">K R E T</span>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel Column -->
+                        <div class="side-column">
+                            <!-- Top Right: Blocks -->
+                            <div class="hud-panel panel-green" id="panel-blocks">
+                                <div class="screw top-left"></div>
+                                <div class="screw top-right"></div>
+                                <div class="screw bottom-left"></div>
+                                <div class="screw bottom-right"></div>
+                                <h2 data-lang-pl="Klocki" data-lang-en="Blocks">Klocki</h2>
+                                <div class="hud-value" id="blocks-val">0</div>
+                            </div>
+                            
+                            <!-- Bottom Right: Speed -->
+                            <div class="hud-panel panel-teal" id="panel-speed">
+                                <div class="screw top-left"></div>
+                                <div class="screw top-right"></div>
+                                <div class="screw bottom-left"></div>
+                                <div class="screw bottom-right"></div>
+                                <h2 data-lang-pl="Szybkość" data-lang-en="Speed">Szybkość</h2>
+                                <div class="hud-value" id="speed-val">0</div>
+                            </div>
+                        </div>
+
+                    </div> <!-- /game-container -->
+                    
+                    <!-- Bottom Controls & Menu (Visible below retro screen) -->
+                    <div class="dashboard-controls">
+                        <button id="btn-settings" class="retro-btn" title="Settings / Ustawienia">⚙</button>
+                        <button id="btn-info" class="retro-btn" title="Info / Autorzy">ℹ</button>
+                        <button id="btn-pause" class="retro-btn" data-lang-pl="PAUZA" data-lang-en="PAUSE">PAUZA</button>
+                        <button id="btn-reset" class="retro-btn" data-lang-pl="RESTART" data-lang-en="RESTART">RESTART</button>
+                        <button id="btn-lang" class="retro-btn">PL/EN</button>
+                    </div>
+
+                    <!-- On-Screen Controls for Mobile/Touch -->
+                    <div class="touch-controls" id="touch-controls">
+                        <button class="touch-btn left" id="touch-left">←</button>
+                        <button class="touch-btn up" id="touch-up">↑</button>
+                        <button class="touch-btn right" id="touch-right">→</button>
+                    </div>
+
+                </div> <!-- /screen-glass -->
+            </div> <!-- /crt-effects -->
+        </div> <!-- /screen-frame -->
+    </div> <!-- /arcade-cabinet -->
+
+    <!-- Settings Dialog -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content retro-card">
+            <h2 data-lang-pl="USTAWIENIA" data-lang-en="SETTINGS">USTAWIENIA</h2>
+            
+            <div class="settings-group">
+                <label data-lang-pl="Język:" data-lang-en="Language:">Język:</label>
+                <div class="btn-group">
+                    <button id="lang-pl" class="toggle-btn active">POLSKI</button>
+                    <button id="lang-en" class="toggle-btn">ENGLISH</button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label data-lang-pl="Efekt CRT:" data-lang-en="CRT Effect:">Efekt CRT:</label>
+                <div class="btn-group">
+                    <button id="crt-on" class="toggle-btn active" data-lang-pl="WŁ" data-lang-en="ON">WŁ</button>
+                    <button id="crt-off" class="toggle-btn" data-lang-pl="WYŁ" data-lang-en="OFF">WYŁ</button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label data-lang-pl="Rozmiar planszy:" data-lang-en="Board Size:">Rozmiar planszy:</label>
+                <div class="btn-group">
+                    <button id="size-small" class="toggle-btn" data-lang-pl="MAŁY" data-lang-en="SMALL">MAŁY</button>
+                    <button id="size-medium" class="toggle-btn active" data-lang-pl="ŚREDNI" data-lang-en="MEDIUM">ŚREDNI</button>
+                    <button id="size-large" class="toggle-btn" data-lang-pl="DUŻY" data-lang-en="LARGE">DUŻY</button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label data-lang-pl="Dźwięk:" data-lang-en="Sound:">Dźwięk:</label>
+                <div class="btn-group">
+                    <button id="sound-on" class="toggle-btn active" data-lang-pl="WŁ" data-lang-en="ON">WŁ</button>
+                    <button id="sound-off" class="toggle-btn" data-lang-pl="WYŁ" data-lang-en="OFF">WYŁ</button>
+                </div>
+                <div class="slider-container">
+                    <span class="volume-icon">🔊</span>
+                    <input type="range" id="volume-slider" min="0" max="100" value="50">
+                </div>
+            </div>
+
+            <div class="settings-group instructions-box">
+                <h3 data-lang-pl="JAK GRAĆ" data-lang-en="HOW TO PLAY">JAK GRAĆ</h3>
+                <p data-lang-pl="Steruj kretem za pomocą strzałek (←, →, ↑) lub klawiszy A, D, W." data-lang-en="Control the mole using Arrow Keys (←, →, ↑) or A, D, W.">Steruj kretem za pomocą strzałek (←, →, ↑) lub klawiszy A, D, W.</p>
+                <p data-lang-pl="Zjadaj spadające klocki, by zdobywać punkty. Zjedzenie całego klocka daje bonus." data-lang-en="Eat falling blocks to score points. Eating a complete block grants a bonus.">Zjadaj spadające klocki, by zdobywać punkty. Zjedzenie całego klocka daje bonus.</p>
+                <p data-lang-pl="Kret podlega grawitacji. Nie możesz zejść w dół ręcznie, ale spadniesz jeśli pod Tobą nie będzie oparcia." data-lang-en="The mole is subject to gravity. You cannot move down manually, but you will fall if there is no support beneath you.">Kret podlega grawitacji. Nie możesz zejść w dół ręcznie, ale spadniesz jeśli pod Tobą nie będzie oparcia.</p>
+                <p class="warning-text" data-lang-pl="UWAGA: Unikaj przygniecenia przez spadające z góry klocki!" data-lang-en="WARNING: Avoid being crushed by blocks falling from above!">UWAGA: Unikaj przygniecenia przez spadające z góry klocki!</p>
+            </div>
+
+            <div class="settings-group highscores-box">
+                <h3 data-lang-pl="NAJLEPSZE WYNIKI" data-lang-en="HIGH SCORES">NAJLEPSZE WYNIKI</h3>
+                <ol id="high-scores-list">
+                    <!-- Loaded dynamically -->
+                </ol>
+            </div>
+
+            <button id="btn-close-settings" class="retro-btn wide" data-lang-pl="ZAMKNIJ" data-lang-en="CLOSE">ZAMKNIJ</button>
+        </div>
+    </div>
+
+    <!-- Info Dialog -->
+    <div class="modal-overlay" id="info-modal">
+        <div class="modal-content retro-card">
+            <h2 data-lang-pl="O GRZE" data-lang-en="ABOUT THE GAME">O GRZE</h2>
+            
+            <div class="settings-group instructions-box" style="text-align: center; border-bottom: none; padding-bottom: 0;">
+                <p style="font-size: 11px; color: #ffff00; margin-bottom: 15px;" data-lang-pl="KRET (REMAKE)" data-lang-en="THE MOLE (REMAKE)">KRET (REMAKE)</p>
+                
+                <p data-lang-pl="Ta gra jest remake'iem i hołdem dla kultowej polskiej gry zręcznościowo-logicznej 'Kret' z 1991 roku, wydanej na komputery PC (DOS)." data-lang-en="This game is a remake and tribute to the cult Polish puzzle-arcade game 'Kret' (The Mole) from 1991, originally released for IBM PC (DOS).">Ta gra jest remake'iem i hołdem dla kultowej polskiej gry zręcznościowo-logicznej 'Kret' z 1991 roku, wydanej na komputery PC (DOS).</p>
+                
+                <p style="margin-top: 15px; font-weight: bold; color: #00aaaa;" data-lang-pl="Oryginalni Autorzy:" data-lang-en="Original Authors:">Oryginalni Autorzy:</p>
+                <p style="font-size: 12px; color: #ffffff;" data-lang-pl="Andrzej Baka & Mariusz Buras (1991)" data-lang-en="Andrzej Baka & Mariusz Buras (1991)">Andrzej Baka & Mariusz Buras (1991)</p>
+                
+                <p style="margin-top: 20px;" data-lang-pl="Remake został stworzony w 2026 roku z zachowaniem oryginalnego stylu graficznego VGA, chiptune'owych efektów dźwiękowych oraz mechaniki wspinaczki i grawitacji." data-lang-en="This remake was created in 2026, preserving the original VGA graphical style, chiptune sound effects, and climbing/gravity mechanics.">Remake został stworzony w 2026 roku z zachowaniem oryginalnego stylu graficznego VGA, chiptune'owych efektów dźwiękowych oraz mechaniki wspinaczki i grawitacji.</p>
+            </div>
+            
+            <button id="btn-close-info" class="retro-btn wide" data-lang-pl="ZAMKNIJ" data-lang-en="CLOSE">ZAMKNIJ</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
