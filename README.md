@@ -2,6 +2,8 @@
 
 A modern, high-fidelity web-based clone and tribute to the classic 1991 Polish puzzle-arcade DOS game **Kret** (The Mole), originally developed by Andrzej Baka and Mariusz Buras. Built in 100% Vanilla JavaScript, HTML5 Canvas, and CSS3, this clone features chiptune chimes synthesized via the Web Audio API, responsive CRT monitor styling, customizable screen sizing, and bilingual support.
 
+### 🎮 **[Play Live on GitHub Pages!](https://apoblock.github.io/kret-ai-2026/)**
+
 ---
 
 ## ℹ About the Original Game
